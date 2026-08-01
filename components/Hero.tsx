@@ -7,9 +7,13 @@ function Stars({ rating }: { rating: number }) {
      half-star glyph U+2BE8, which has almost no font coverage */
   const pct = (Math.max(0, Math.min(5, rating)) / 5) * 100;
   return (
-    <div className="stars" aria-label={`${rating} out of 5`}>
-      <span className="stars__base">★★★★★</span>
-      <span className="stars__fill" style={{ width: `${pct}%` }}>
+    <div className="stars" role="img" aria-label={`${rating} out of 5 stars`}>
+      {/* both layers hidden from AT — otherwise the stacked glyphs are
+          announced as ten stars instead of the rating */}
+      <span className="stars__base" aria-hidden="true">
+        ★★★★★
+      </span>
+      <span className="stars__fill" style={{ width: `${pct}%` }} aria-hidden="true">
         ★★★★★
       </span>
     </div>
