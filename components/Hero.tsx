@@ -1,13 +1,13 @@
 import Image from "next/image";
-import { site } from "@/content/site";
+import type { Site } from "@/content/site";
 import { SocialLinks } from "./icons";
 
-function Stars({ rating }: { rating: number }) {
+function Stars({ rating, label }: { rating: number; label: string }) {
   /* five grey stars with a gold layer clipped to the rating — avoids the
      half-star glyph U+2BE8, which has almost no font coverage */
   const pct = (Math.max(0, Math.min(5, rating)) / 5) * 100;
   return (
-    <div className="stars" role="img" aria-label={`${rating} out of 5 stars`}>
+    <div className="stars" role="img" aria-label={`${rating} ${label}`}>
       {/* both layers hidden from AT — otherwise the stacked glyphs are
           announced as ten stars instead of the rating */}
       <span className="stars__base" aria-hidden="true">
@@ -20,8 +20,8 @@ function Stars({ rating }: { rating: number }) {
   );
 }
 
-export default function Hero() {
-  const { brand, hero } = site;
+export default function Hero({ site }: { site: Site }) {
+  const { brand, hero, ui } = site;
 
   return (
     <section className="hero wrap" id="top">
@@ -50,7 +50,7 @@ export default function Hero() {
         <figure className="framed">
           <Image
             src={hero.portrait}
-            alt={`${brand.owner} — portrait`}
+            alt={`${brand.owner} — ${ui.portrait}`}
             width={900}
             height={900}
             priority
@@ -60,11 +60,8 @@ export default function Hero() {
 
       <div className="hero__foot">
         <div className="trust">
-          <Stars rating={brand.stars} />
+          <Stars rating={brand.stars} label={ui.starsOf} />
           <span>{brand.trust}</span>
-        </div>
-        <div className="place">
-          <span aria-hidden="true">📍</span> <span>{brand.location}</span>
         </div>
       </div>
     </section>

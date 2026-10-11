@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Gallery } from "@/content/site";
+import type { Gallery, Site } from "@/content/site";
 
 const clipSrc = (id: string) => `/assets/clips/${id}.mp4`;
 const posterSrc = (id: string) => `/assets/posters/${id}.jpg`;
@@ -10,7 +10,7 @@ const posterSrc = (id: string) => `/assets/posters/${id}.jpg`;
    One card. Falls back to a labelled placeholder tile if the file
    is missing, so a bad id never leaves a blank hole in the grid.
    -------------------------------------------------------------- */
-function ClipCard({ id, onOpen }: { id: string; onOpen: () => void }) {
+function ClipCard({ id, label, onOpen }: { id: string; label: string; onOpen: () => void }) {
   const video = useRef<HTMLVideoElement>(null);
   const [broken, setBroken] = useState(false);
 
@@ -27,7 +27,7 @@ function ClipCard({ id, onOpen }: { id: string; onOpen: () => void }) {
       className="card"
       tabIndex={0}
       role="button"
-      aria-label="Play clip"
+      aria-label={label}
       onMouseEnter={play}
       onMouseLeave={stop}
       onFocus={play}
@@ -65,7 +65,7 @@ function ClipCard({ id, onOpen }: { id: string; onOpen: () => void }) {
    Galleries + the shared lightbox. One flat list backs the
    arrow-key navigation across all three rows.
    -------------------------------------------------------------- */
-export default function Galleries({ galleries }: { galleries: Gallery[] }) {
+export default function Galleries({ galleries, ui }: { galleries: Gallery[]; ui: Site["ui"] }) {
   const all = galleries.flatMap((g) => g.clips);
   const [open, setOpen] = useState<number | null>(null);
   const lbVideo = useRef<HTMLVideoElement>(null);
@@ -79,7 +79,14 @@ export default function Galleries({ galleries }: { galleries: Gallery[] }) {
   useEffect(() => {
     if (open === null) return;
     document.body.classList.add("is-locked");
-    lbVideo.current?.play().catch(() => {});
+    /* this runs after the click, outside the gesture — Safari/iOS then refuse
+       to start a video with sound. Fall back to muted playback; the native
+       controls let the viewer unmute. */
+    const v = lbVideo.current;
+    v?.play().catch(() => {
+      v.muted = true;
+      v.play().catch(() => {});
+    });
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
@@ -97,18 +104,18 @@ export default function Galleries({ galleries }: { galleries: Gallery[] }) {
 
   return (
     <>
-      {galleries.map((g) => {
+      {galleries.map((g, gi) => {
         const base = offset;
         offset += g.clips.length;
 
         return (
-          <div key={g.title}>
+          <div key={g.title} id={gi === 0 ? "examples" : undefined}>
             <section className="gal">
               <div className="wrap">
                 <h2 className="gal__title">{g.title}</h2>
                 <div className="gal__row">
                   {g.clips.map((id, i) => (
-                    <ClipCard key={id} id={id} onOpen={() => setOpen(base + i)} />
+                    <ClipCard key={id} id={id} label={ui.playClip} onOpen={() => setOpen(base + i)} />
                   ))}
                 </div>
               </div>
@@ -127,20 +134,20 @@ export default function Galleries({ galleries }: { galleries: Gallery[] }) {
 
       {open !== null && (
         <div className="lightbox" onClick={(e) => e.target === e.currentTarget && close()}>
-          <button className="lightbox__close" onClick={close} aria-label="Close">
+          <button className="lightbox__close" onClick={close} aria-label={ui.close}>
             ×
           </button>
           <button
             className="lightbox__nav lightbox__nav--prev"
             onClick={() => step(-1)}
-            aria-label="Previous"
+            aria-label={ui.prev}
           >
             ‹
           </button>
           <button
             className="lightbox__nav lightbox__nav--next"
             onClick={() => step(1)}
-            aria-label="Next"
+            aria-label={ui.next}
           >
             ›
           </button>

@@ -12,16 +12,50 @@
    ============================================================ */
 
 export type Gallery = { title: string; clips: string[]; bleed?: boolean };
-export type CompareRow = { cat: string; trad: string; ai: string };
+export type Plan = {
+  name: string;
+  pitch: string;
+  price: string;
+  items: string[];
+  link?: "agencies";
+  featured?: boolean;
+};
 export type FaqItem = { q: string; a: string };
 
 export const site = {
+  lang: "en",
+
+  meta: {
+    title: "AI UGC Studio — UGC-style video ads that convert",
+    description:
+      "AI-generated UGC-style video ads for brands. Scale creative testing " +
+      "without traditional production costs.",
+    ogTitle: "AI UGC Studio",
+    ogDescription: "AI-generated UGC-style video ads that convert.",
+  },
+
+  /* site paths, so each language links within itself */
+  paths: { home: "/", agencies: "/agencies" },
+
+  /* short UI strings — nav, aria labels and the language switch */
+  ui: {
+    nav: { agencies: "For agencies" },
+    starsOf: "out of 5 stars",
+    portrait: "portrait",
+    industries: "Industries",
+    playClip: "Play clip",
+    close: "Close",
+    prev: "Previous",
+    next: "Next",
+    bookCall: "Book a call on Calendly",
+    langSwitch: { label: "FR", aria: "Voir le site en français" },
+  },
+
   brand: {
     name: "AI UGC STUDIO",
     owner: "Cherif Sylla",
     email: "cherifsylla21@gmail.com",
-    location: "Los Angeles, CA",
-    instagram: "https://www.instagram.com/cherifsylla_/",
+    calendly: "https://calendly.com/cherifsylla21/30min",
     linkedin: "", // empty → the icon is not rendered
     stars: 4.5,
     trust: "Trusted by 50+ brands",
@@ -36,7 +70,7 @@ export const site = {
       "ad performance and scale creative testing — without the cost of a " +
       "traditional production.",
     contactTitle: "Wanna get in touch",
-    contactSub: "DM me on",
+    contactSub: "Book a call",
     or: "OR",
     portrait: "/assets/img/portrait.jpg",
   },
@@ -55,32 +89,80 @@ export const site = {
   galleries: [
     {
       title: "Video ad samples that convert.",
-      clips: ["clip-01", "clip-02", "clip-03", "clip-04"],
+      clips: ["clip-01", "clip-02", "clip-04", "clip-05"],
     },
     {
       title: "AI UGC Examples",
-      clips: ["clip-05", "clip-06", "clip-07", "clip-08"],
-    },
-    {
-      title: "More examples..",
-      clips: ["clip-09", "clip-10", "clip-11", "clip-12"],
+      clips: ["clip-06", "clip-07", "clip-10", "clip-12"],
       bleed: true,
     },
   ] as Gallery[],
 
-  compare: {
-    title: "Why brands are switching to AI UGC.",
-    sub: "The honest comparison",
-    head: ["Category", "Traditional UGC", "AI UGC"],
-    rows: [
-      { cat: "Production Time", trad: "2–4 weeks", ai: "24–72 hours" },
-      { cat: "Cost", trad: "$500–2000+", ai: "$20–100" },
-      { cat: "Scalability", trad: "Limited", ai: "Unlimited" },
-      { cat: "Creative Testing", trad: "Expensive", ai: "Affordable" },
-      { cat: "Localization", trad: "Very difficult", ai: "Easy" },
-      { cat: "Revision Speed", trad: "Slow", ai: "Fast" },
-    ] as CompareRow[],
-    footer: "AI UGC wins in every category. Start creating faster today.",
+  pricing: {
+    title: "Packages",
+    sub: "Clear scopes, no surprises. Every package is quoted on your brief.",
+    plans: [
+      {
+        name: "Starter",
+        pitch: "Test one product, fast.",
+        price: "Quote on request",
+        items: [
+          "5 video variations (hooks & angles)",
+          "1 product, 1 script",
+          "Delivered within 72 hours",
+          "2 revision rounds",
+          "9:16, ready for Meta, TikTok & Reels",
+        ],
+      },
+      {
+        name: "Growth",
+        pitch: "Ongoing creative testing.",
+        price: "Quote on request",
+        items: [
+          "10 video variations",
+          "Up to 3 script angles",
+          "Delivered within 5 business days",
+          "2 revision rounds",
+          "Captions included",
+        ],
+      },
+      {
+        name: "Agency pack",
+        pitch: "For agencies running several clients.",
+        price: "Quote on request",
+        items: [
+          "20 videos / month",
+          "White label — delivered under your brand",
+          "NDA on request",
+          "One monthly invoice",
+          "Priority turnaround",
+        ],
+        link: "agencies",
+        featured: true,
+      },
+    ] as Plan[],
+    cta: "Book a call",
+    more: "Agency details",
+  },
+
+  limits: {
+    title: "What AI UGC does well — and where it doesn't.",
+    sub: "Straight answers, so you know what you're buying.",
+    goodTitle: "Where it shines",
+    good: [
+      "Testing many hooks and angles quickly, without re-shooting",
+      "Talking-head testimonials and problem/solution scripts",
+      "Turning one winning ad into several languages",
+      "Fast iterations on whatever is performing",
+    ],
+    badTitle: "Where it's limited",
+    bad: [
+      "Hands handling a product — fingers, grip and labels can drift. For close-ups I use your real product shots.",
+      "Detailed physical demos (applying, unboxing, texture) look more convincing filmed for real.",
+      "Faces hold up well in talking-head framing; fast motion and extreme close-ups are less reliable.",
+      "Platforms may require AI content to be labelled, and health or before/after claims need your own compliance review.",
+    ],
+    footer: "If a brief isn't a good fit for AI, I'll tell you before we start.",
   },
 
   about: {
@@ -104,15 +186,16 @@ export const site = {
     kicker: "FAQ · Common questions",
     title: "Everything you need to know about AI UGC ads.",
     note:
-      "Still have questions? DM us on Instagram — we usually respond " +
-      "within the same business day.",
+      "Still have questions? Book a 30-minute call — pick whichever " +
+      "slot suits you.",
     items: [
       {
         q: "What exactly is AI UGC?",
         a:
           "User-generated-content style video ads created with AI creators, " +
-          "AI voice and conversion-driven scripts. The output looks and " +
-          "performs like real UGC, at a fraction of the time and cost.",
+          "AI voice and conversion-driven scripts. It looks like UGC and is " +
+          "built to perform like it, in a fraction of the time — the section " +
+          "above covers what it doesn't do well.",
       },
       {
         q: "How long does delivery take?",
@@ -142,6 +225,61 @@ export const site = {
           "can adapt a script you bring us.",
       },
     ] as FaqItem[],
+  },
+
+  agencies: {
+    metaTitle: "AI UGC for agencies — white label video ads | AI UGC Studio",
+    metaDescription:
+      "White-label AI UGC video ads for agencies: monthly volume, 24–72 hour " +
+      "turnaround, NDA on request, one monthly invoice.",
+    kicker: "For agencies",
+    title: "AI UGC for your clients. Under your brand.",
+    intro:
+      "You own the strategy and the client relationship; I produce the " +
+      "volume. UGC-style video ads delivered white label, on a schedule " +
+      "your clients can count on.",
+    points: [
+      {
+        title: "White label",
+        body:
+          "No name, no watermark, no credit. You present the work as your " +
+          "studio's, and I never contact your clients directly.",
+      },
+      {
+        title: "Volume",
+        body:
+          "From 20 videos a month, split across as many client accounts as " +
+          "you need, with hook and angle variations built for testing.",
+      },
+      {
+        title: "Turnaround",
+        body:
+          "24–72 hours per batch once the brief is approved; larger batches " +
+          "within 5 business days. Timelines are agreed up front.",
+      },
+      {
+        title: "NDA available",
+        body:
+          "Happy to sign your NDA before seeing client briefs. Client work " +
+          "stays off my portfolio unless you say otherwise.",
+      },
+      {
+        title: "Monthly invoicing",
+        body:
+          "One invoice a month for all your clients, instead of paying " +
+          "order by order.",
+      },
+    ],
+    stepsTitle: "How we start",
+    steps: [
+      "A 30-minute call: your clients, volumes and how you brief.",
+      "A test batch on one client, so you can judge the quality on real work.",
+      "A monthly plan sized to your pipeline, adjustable each month.",
+    ],
+    ctaTitle: "Let's see if it fits.",
+    cta: "Book a 30-minute call",
+    or: "or email",
+    examples: "See video examples",
   },
 
   footerCta: "Contact Me!",

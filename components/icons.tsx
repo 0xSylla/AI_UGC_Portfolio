@@ -1,17 +1,10 @@
-export function InstagramIcon() {
+/* a plain calendar in Calendly blue — the booking link, not a brand logo */
+export function CalendarIcon() {
   return (
-    <svg viewBox="0 0 24 24" role="img" aria-label="Instagram">
-      <defs>
-        <linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0" stopColor="#FEDA75" />
-          <stop offset=".35" stopColor="#FA7E1E" />
-          <stop offset=".65" stopColor="#D62976" />
-          <stop offset="1" stopColor="#962FBF" />
-        </linearGradient>
-      </defs>
-      <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="6" fill="url(#ig)" />
-      <circle cx="12" cy="12" r="4.6" fill="none" stroke="#fff" strokeWidth="1.9" />
-      <circle cx="17.4" cy="6.6" r="1.3" fill="#fff" />
+    <svg viewBox="0 0 24 24" role="img" aria-label="Calendly">
+      <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="6" fill="#006bff" />
+      <rect x="6" y="7.4" width="12" height="10.6" rx="1.6" fill="none" stroke="#fff" strokeWidth="1.7" />
+      <path d="M6 11h12M9.4 5.6v3.4M14.6 5.6v3.4" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   );
 }
@@ -31,10 +24,10 @@ export function LinkedInIcon() {
 /** Renders only the networks that actually have a URL. */
 export function SocialLinks({
   brand,
-  order = ["instagram", "linkedin"],
+  order = ["calendly", "linkedin"],
 }: {
-  brand: { instagram: string; linkedin: string };
-  order?: ("instagram" | "linkedin")[];
+  brand: { calendly: string; linkedin: string };
+  order?: ("calendly" | "linkedin")[];
 }) {
   return (
     <>
@@ -42,7 +35,7 @@ export function SocialLinks({
         .filter((k) => brand[k])
         .map((k) => (
           <a key={k} href={brand[k]} target="_blank" rel="noopener noreferrer">
-            {k === "instagram" ? <InstagramIcon /> : <LinkedInIcon />}
+            {k === "calendly" ? <CalendarIcon /> : <LinkedInIcon />}
           </a>
         ))}
     </>
